@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f8ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        input[type="text"] {
+            width: 40%;
+            padding: 12px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            background-color: #088178;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #065c4b;
+        }
+
+        .heading {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #088178;
+        }
+
+        .data {
+            margin-top: 20px;
+        }
+
+        .forecast-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding-bottom: 20px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .forecast-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .forecast-card {
+            flex: 0 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            text-align: center;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .forecast-card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #088178;
+        }
+
+        .forecast-card h4 {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .heading-forecast {
+            margin-bottom: 30px;
+            font-size: 24px;
+            color: #088178;
+        }
+
+        .tag-error {
+            text-align: center;
+            color: red;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .s {
+            font-size: 40px;
+        }
+
+        .data strong {
+            font-weight: bold;
+        }
+
+        .data h4 {
+            font-weight: normal;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="heading s">Search City</h1>
+        <div class="City">
+            <form action="/submit" method="POST">
+                <input type="text" name="city" placeholder="Search" />
+                <input type="submit" value="OK" />
+            </form>
+        </div>
+
+        <div class="data">
+            <% if(locals.data) { %>
+                <div>
+                    <h4><strong>Weather:</strong>
+                        <%= data.list[0].weather[0].main %> (<%=data.list[0].weather[0].description %>)
+                    </h4>
+                    <h4><strong>Temperature:</strong>
+                        <%= data.list[0].main.temp %> K
+                    </h4>
+                    <h4><strong>Wind speed:</strong>
+                        <%= data.list[0].wind.speed %> m/s
+                    </h4>
+                    <h4><strong>Humidity:</strong>
+                        <%= data.list[0].main.humidity %>%
+                    </h4>
+                </div>
+                <% } %>
+
+                    <% if(locals.data && locals.data.list && locals.data.list.length>= 4) { %>
+                        <h2 class="s heading heading-forecast">Weather for the next few hours</h2>
+                        <div class="forecast-container">
+                            <% for (let i=1; i < 5; i++) { %>
+                                <div class="forecast-card">
+                                    <h3><strong>
+                                            <%= data.list[i].dt_txt %>
+                                        </strong></h3>
+                                    <h4><strong>Weather: </strong>
+                                        <%= data.list[i].weather[0].main %> (<%= data.list[i].weather[0].description %>)
+                                    </h4>
+                                    <h4><strong>Temperature: </strong>
+                                        <%= data.list[i].main.temp %> K
+                                    </h4>
+                                    <h4><strong>Wind speed: </strong>
+                                        <%= data.list[i].wind.speed %> m/s
+                                    </h4>
+                                    <h4><strong>Humidity: </strong>
+                                        <%= data.list[i].main.humidity %>%
+                                    </h4>
+                                </div>
+                                <% } %>
+                        </div>
+                        <footer><strong>Made with ❤️ by Vishwas Mishra</strong> </footer>
+                        <% } %>
+        </div>
+    </div>
+
+    <% if(locals.error) { %>
+        <div class="tag-error">
+            <%= error %>
+        </div>
+        <% } %>
+
+
+            </div>
+</body>
+
+</html>
